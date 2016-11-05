@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JonathanGrant/HuskieHack#readme",
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "react": "^15.3.2"
   }
 }

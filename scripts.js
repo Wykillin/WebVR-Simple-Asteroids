@@ -15,7 +15,7 @@ var Camera = React.createClass({
 var Sky = React.createClass({
   render: function() {
     return (
-        <a-sky src="http://bjstlh.com/data/wallpapers/234/WDF_2704897.jpg">
+        <a-sky src="./sky.jpg">
         </a-sky>
         )
   }
@@ -28,17 +28,9 @@ var Words = React.createClass({
 })
 
 var AFrameScene = React.createClass({
-  getInitialState: function() {
-      return {
-          words: this.props.readingMaterial.split(" "),
-          currentWord: 0,
-          playState: 'first',
-          pressed: false
-      }
-  },
   render: function() {
     return (
-      <a-scene onMouseDown={this.btnPress}>
+      <a-scene>
         <Camera/>
         <Sky />
         <Words />
