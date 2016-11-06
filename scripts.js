@@ -79,7 +79,7 @@ var Laser = React.createClass({
     setTimeout(this.doPhysics, 10)
   },
   doPhysics: function(){
-    if(Math.abs(this.state.z) > 50 || Math.abs(this.state.y) > 50 || Math.abs(this.state.x) > 50 ) {
+    if(Math.sqrt(Math.abs(this.state.z) + Math.abs(this.state.y) + Math.abs(this.state.x) > 150 )) {
       this.props.removeLaser()
     } else {
       this.setState({x: this.state.x + this.state.vX, y: this.state.y + this.state.vY, z: this.state.z + this.state.vZ})
