@@ -12,6 +12,16 @@ var Camera = React.createClass({
   }
 })
 
+
+var Laser = React.createClass({
+	render: function() {
+		console.log("Render called")
+	return (
+	<a-cylinder color="#000" height="4" radius="0.05" rotation="90 0 0" position="0 0 -4">
+	</a-cylinder>)
+	}
+})
+
 var Sky = React.createClass({
   render: function() {
     return (
@@ -21,11 +31,6 @@ var Sky = React.createClass({
   }
 })
 
-var Words = React.createClass({
-  render: function() {
-    return (<a-entity text={"text: Hello this is more than one word"} position="-1 0 -14" scale="1 1 1"></a-entity>)
-  }
-})
 
 var Asteroid = React.createClass({
   getInitialState() {
@@ -77,6 +82,7 @@ var AFrameScene = React.createClass({
         <Camera/>
         <Sky />
         {Asteroids}
+        <Laser />
       </a-scene>)
   }
 })
