@@ -125,13 +125,13 @@ var AFrameScene = React.createClass({
     console.log('BOOM')
     var newAsteroids = this.state.asteroids
     newAsteroids.splice(asteroid, 1)
-    newAsteroids.push(<Asteroid key={Math.random() * 9999999} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} x={Math.random() * (200.0) - 100} y={Math.random() * (200.0) - 100} z={Math.random() * (-40.0) - 90} doesIntersectWithLaser={this.doesIntersectWithLaser} />)
+    newAsteroids.push(<Asteroid key={Math.random() * 9999999} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} x={Math.random() * (50.0) - 25} y={Math.random() * (50.0) - 25} z={Math.random() * (-40.0) - 90} doesIntersectWithLaser={this.doesIntersectWithLaser} />)
     this.setState({asteroids: newAsteroids, numHitMe: this.state.numDestroyed + 1})
   },
   hitCamera: function(asteroid) {
     var newAsteroids = this.state.asteroids
     newAsteroids.splice(asteroid, 1)
-    newAsteroids.push(<Asteroid key={Math.random() * 9999999} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} x={Math.random() * (200.0) - 100} y={Math.random() * (200.0) - 100} z={Math.random() * (-40.0) - 90} doesIntersectWithLaser={this.doesIntersectWithLaser} />)
+    newAsteroids.push(<Asteroid key={Math.random() * 9999999} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} x={Math.random() * (50.0) - 25} y={Math.random() * (50.0) - 25} z={Math.random() * (-40.0) - 90} doesIntersectWithLaser={this.doesIntersectWithLaser} />)
     this.setState({asteroids: newAsteroids, numHitMe: this.state.numHitMe + 1})
   },
   updateLaserXYZ: function(laser, key, x, y, z) {
