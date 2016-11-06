@@ -79,7 +79,7 @@ var Laser = React.createClass({
     setTimeout(this.doPhysics, 10)
   },
   doPhysics: function(){
-    if(Math.abs(this.state.z) > 150 || Math.abs(this.state.y) > 150 || Math.abs(this.state.x) > 150 ) {
+    if(Math.abs(this.state.z) > 50 || Math.abs(this.state.y) > 50 || Math.abs(this.state.x) > 50 ) {
       this.props.removeLaser()
     } else {
       this.setState({x: this.state.x + this.state.vX, y: this.state.y + this.state.vY, z: this.state.z + this.state.vZ})
@@ -126,7 +126,7 @@ var AFrameScene = React.createClass({
     var newAsteroids = this.state.asteroids
     newAsteroids.splice(asteroid, 1)
     newAsteroids.push(<Asteroid key={Math.random() * 9999999} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} x={Math.random() * (50.0) - 25} y={Math.random() * (50.0) - 25} z={Math.random() * (-40.0) - 90} doesIntersectWithLaser={this.doesIntersectWithLaser} />)
-    this.setState({asteroids: newAsteroids, numHitMe: this.state.numDestroyed + 1})
+    this.setState({asteroids: newAsteroids, numDestroyed: this.state.numDestroyed + 1})
   },
   hitCamera: function(asteroid) {
     var newAsteroids = this.state.asteroids
@@ -165,6 +165,7 @@ var AFrameScene = React.createClass({
         <Sky />
         {this.state.asteroids}
         {myLasers}
+        <a-entity text={"text: "+this.state.numDestroyed} position="-1 0 -4" scale="1 1 1"></a-entity>
       </a-scene>)
   }
 })
