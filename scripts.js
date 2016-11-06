@@ -88,7 +88,7 @@ var Laser = React.createClass({
     }
   },
   render: function() {
-    return (<a-sphere color="#000" height="4" radius="0.5" position={this.state.x + ' ' + this.state.y + ' ' + this.state.z} />)
+    return (<a-sphere src="./lasertexture.png" height="4" radius="0.5" position={this.state.x + ' ' + this.state.y + ' ' + this.state.z} />)
     // return (<a-cylinder color="#000" height="4" radius="0.05" rotation={(this.state.xAngle + 90) + ' ' + this.state.yAngle + " 0"} position={this.state.x + ' ' + this.state.y + ' ' + this.state.z} />)
   }
 })
