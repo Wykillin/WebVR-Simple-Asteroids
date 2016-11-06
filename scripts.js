@@ -67,7 +67,7 @@ var Laser = React.createClass({
       xAngle: this.props.x,
       yAngle: this.props.y,
       x: 0,
-      y: 0,
+      y: 0.5,
       z: 0,
       vX: vX,
       vY: vY,
