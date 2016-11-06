@@ -1,7 +1,7 @@
 var Camera = React.createClass({
   getInitialState: function() {
     return {
-      pos: '0 0 0'
+      pos: '0 -1 0'
     }
   },
   render: function() {
@@ -29,14 +29,22 @@ var Words = React.createClass({
 
 var Asteroid = React.createClass({
   getInitialState() {
+    var x = this.props.x
+    var y = this.props.y
+    var z = this.props.z
+    var totalDistance = Math.sqrt(x * x + y * y + z * z)
+    console.log(totalDistance)
     return {
       x: this.props.x,
       y: this.props.y,
       z: this.props.z,
-      velocity: 0.5
+      vX: -(x / totalDistance),
+      vY: -(y / totalDistance),
+      vZ: -(z / totalDistance)
     }
   },
   componentDidMount: function() {
+    console.log(this.state)
     setTimeout(this.doPhysics, 10)
   },
   doPhysics: function() {
@@ -44,30 +52,33 @@ var Asteroid = React.createClass({
       this.props.hitCamera()
     } else {
       this.setState({
-        z: this.state.z + this.state.velocity
+        x: this.state.x + this.state.vX,
+        y: this.state.y + this.state.vY,
+        z: this.state.z + this.state.vZ
       })
       setTimeout(this.doPhysics, 10)
     }
   },
   render: function() {
+    // console.log("render called", this.state)
     return (<a-sphere src='./meteortexture.jpg' position={this.state.x+' '+this.state.y+' '+this.state.z}></a-sphere>)
   }
 })
 
 var AFrameScene = React.createClass({
   getInitialState: function() {
-    var myAsteroid = <Asteroid key='a' x={0} y={0} z={-100} hitCamera={this.hitCamera} />
+    var myAsteroid = <Asteroid key='a' x={1.0} y={22.0} z={-100.0} hitCamera={this.hitCamera} />
     return {
       asteroids: [myAsteroid],
-      numHit: 0,
+      numHitMe: 0,
       numDestroyed: 0
     }
   },
   hitCamera: function(asteroid) {
     var newAsteroids = this.state.asteroids
     newAsteroids.splice(asteroid, 1)
-    newAsteroids.push(<Asteroid key={Math.random() * 9999999} hitCamera={this.hitCamera} x={Math.random() * (10) - 5} y={Math.random() * (10) - 5} z={Math.random() * (-90)} />)
-    this.setState({asteroids: newAsteroids})
+    newAsteroids.push(<Asteroid key={Math.random() * 9999999} hitCamera={this.hitCamera} x={Math.random() * (200.0) - 100} y={Math.random() * (200.0) - 100} z={Math.random() * (-40.0) - 90} />)
+    this.setState({asteroids: newAsteroids, numHitMe: this.state.numHitMe + 1})
   },
   render: function() {
     console.log(this.state)
