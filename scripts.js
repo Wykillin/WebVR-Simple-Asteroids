@@ -6,7 +6,8 @@ var Camera = React.createClass({
   },
   render: function() {
     return (
-        <a-camera position={this.state.pos}>
+        <a-camera id='cam' position={this.state.pos}>
+          <a-cursor color="#FF0000"></a-cursor>
         </a-camera>
         )
   }
@@ -52,29 +53,40 @@ var Asteroid = React.createClass({
     }
   },
   render: function() {
-    return (<a-sphere src='./meteortexture.jpg' position={this.state.x+' '+this.state.y+' '+this.state.z}></a-sphere>)
+    return (<a-sphere src='./meteortexture.jpg' position={this.state.x+' '+this.state.y+' '+this.state.z} ></a-sphere>)
   }
 })
 
 var Laser = React.createClass({
   getInitialState: function() {
+    var vX = -Math.sin(3.14 * this.props.y / 180)
+    var vY = Math.sin(3.14 * this.props.x / 180)
+    var vZ = -Math.cos(3.14 * this.props.y / 180)
+    console.log(this.props.x, this.props.y, vX, vY, vZ)
     return {
-      z: 0
+      xAngle: this.props.x,
+      yAngle: this.props.y,
+      x: 0,
+      y: 0,
+      z: 0,
+      vX: vX,
+      vY: vY,
+      vZ: vZ
     }
   },
   componentDidMount: function() {
     setTimeout(this.doPhysics, 10)
   },
   doPhysics: function(){
-    if(this.state.z < -150) {
+    if(this.state.z < -15) {
       this.props.removeLaser()
     } else {
-      this.setState({z: this.state.z - 0.01})
+      this.setState({x: this.state.x + this.state.vX, y: this.state.y + this.state.vY, z: this.state.z + this.state.vZ})
       setTimeout(this.doPhysics, 10)
     }
   },
   render: function() {
-    return (<a-cylinder color="#000" height="4" radius="0.05" rotation="90 0 0" position={"0 0 "+this.state.z} />)
+    return (<a-cylinder color="#000" height="4" radius="0.05" rotation={(this.state.xAngle + 90) + ' ' + this.state.yAngle + " 0"} position={this.state.x + ' ' + this.state.y + ' ' + this.state.z} />)
   }
 })
 
@@ -85,8 +97,12 @@ var AFrameScene = React.createClass({
       asteroids: [myAsteroid],
       lasers: [],
       numHitMe: 0,
-      numDestroyed: 0
+      numDestroyed: 0,
+      myCam: <Camera />
     }
+  },
+  componentDidMount() {
+    setTimeout(this.shootLaser, 1000)
   },
   hitCamera: function(asteroid) {
     var newAsteroids = this.state.asteroids
@@ -95,10 +111,11 @@ var AFrameScene = React.createClass({
     this.setState({asteroids: newAsteroids, numHitMe: this.state.numHitMe + 1})
   },
   shootLaser: function() {
-    console.log("HEADSHOT")
+    var docCamRotation = document.getElementById('cam').getAttribute('rotation')
     var newLasersArray = this.state.lasers
-    newLasersArray.push(<Laser removeLaser={this.removeLaser}/>)
+    newLasersArray.push(<Laser key={Math.random() * 9999999} x={docCamRotation.x} y={docCamRotation.y} removeLaser={this.removeLaser}/>)
     this.setState({lasers: newLasersArray})
+    setTimeout(this.shootLaser, 500)
   },
   removeLaser: function(laser) {
     console.log('removed')
@@ -107,10 +124,9 @@ var AFrameScene = React.createClass({
     this.setState({lasers: newLasersArray})
   },
   render: function() {
-    console.log(this.state)
     return (
-      <a-scene onMouseDown={this.shootLaser}>
-        <Camera/>
+      <a-scene>
+        {this.state.myCam}
         <Sky />
         {this.state.asteroids}
         {this.state.lasers}
