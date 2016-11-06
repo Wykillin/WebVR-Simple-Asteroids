@@ -8,4 +8,8 @@ app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname + '/index.html'))
 });
 
+app.get('/flash', function(req, res) {
+  res.sendFile(path.join(__dirname + '/flashcards.html'))
+});
+
 app.listen(process.env.PORT || 3000);
