@@ -44,7 +44,8 @@ var Asteroid = React.createClass({
     if(this.state.z >= 0) {
       this.props.hitCamera()
     } else if(this.props.doesIntersectWithLaser(this, this.state.x, this.state.y, this.state.z)) {
-      this.props.laserHitAsteroid()
+      this.props.laserHitAsteroid(this, this.state.x, this.state.y, this.state.z)
+      this.props.isExploded()
     } else {
       this.setState({
         x: this.state.x + 0.7 * this.state.vX,
@@ -55,7 +56,7 @@ var Asteroid = React.createClass({
     }
   },
   render: function() {
-    return (<a-sphere src='./meteortexture.jpg' position={this.state.x+' '+this.state.y+' '+this.state.z} ></a-sphere>)
+    return (<a-sphere src='./meteortexture.jpg' position={this.state.x+' '+this.state.y+' '+this.state.z} ></a-sphere> )
   }
 })
 
@@ -92,13 +93,18 @@ var Laser = React.createClass({
     // return (<a-cylinder color="#000" height="4" radius="0.05" rotation={(this.state.xAngle + 90) + ' ' + this.state.yAngle + " 0"} position={this.state.x + ' ' + this.state.y + ' ' + this.state.z} />)
   }
 })
-
+var Explosion= React.createClass({
+		render: function(){
+			return (<a-image src='./explosion.png' position={this.props.x + " " + this.props.y + " " + this.props.z}></a-image>)
+			}
+})
 var AFrameScene = React.createClass({
   getInitialState: function() {
     var myAsteroid = <Asteroid key='a' x={1.0} y={22.0} z={-100.0} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} doesIntersectWithLaser={this.doesIntersectWithLaser} />
     return {
       asteroids: [myAsteroid],
       lasers: [],
+      explosions: [],
       numHitMe: 0,
       numDestroyed: 0,
       myCam: <Camera />
@@ -121,12 +127,24 @@ var AFrameScene = React.createClass({
     }
     return false
   },
-  laserHitAsteroid: function(asteroid) {
+  isExploded: function(astroid) {
+	  
+},
+  laserHitAsteroid: function(asteroid, x, y, z) {
     console.log('BOOM')
+    var newExplosions = this.state.explosions
+    var explosionKey = Math.random() * 9999999
+    newExplosions.push(<Explosion key={explosionKey} x={x} y={y} z={z}/>)
+    setTimeout(this.removeExplosion,1000)
     var newAsteroids = this.state.asteroids
     newAsteroids.splice(asteroid, 1)
     newAsteroids.push(<Asteroid key={Math.random() * 9999999} laserHitAsteroid={this.laserHitAsteroid} hitCamera={this.hitCamera} x={Math.random() * (50.0) - 25} y={Math.random() * (50.0) - 25} z={Math.random() * (-40.0) - 90} doesIntersectWithLaser={this.doesIntersectWithLaser} />)
-    this.setState({asteroids: newAsteroids, numDestroyed: this.state.numDestroyed + 1})
+    this.setState({explosions: newExplosions, asteroids: newAsteroids, numDestroyed: this.state.numDestroyed + 1})
+  },
+  removeExplosion: function() {
+	var newExplosions = this.state.explosions
+	newExplosions.shift()
+	this.setState({explosions: newExplosions})
   },
   hitCamera: function(asteroid) {
     var newAsteroids = this.state.asteroids
@@ -164,6 +182,7 @@ var AFrameScene = React.createClass({
         {this.state.myCam}
         <Sky />
         {this.state.asteroids}
+        {this.state.explosions}
         {myLasers}
         <a-entity text={"text: "+this.state.numDestroyed} position="-1 0 -4" scale="1 1 1"></a-entity>
       </a-scene>)
